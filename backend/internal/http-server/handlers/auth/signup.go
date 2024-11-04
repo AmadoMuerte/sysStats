@@ -16,16 +16,19 @@ import (
 func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	var req Credentials
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		slog.Error("failed to decode data", slog.String("error", err.Error()))
 		h.respondWithError(w, r, http.StatusBadRequest, "failed to decode data")
 		return
 	}
 
 	if !validateEmail(req.Email) {
+		slog.Error("invalid email", slog.String("error", "invalid email"))
 		h.respondWithError(w, r, http.StatusBadRequest, "invalid email")
 		return
 	}
 
 	if err := validatePassword(req.Password); err != nil {
+		slog.Error("invalid password", slog.String("error", err.Error()))
 		h.respondWithError(w, r, http.StatusBadRequest, "invalid password")
 		return
 	}
@@ -43,18 +46,21 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	userRepository := repository.NewUserRepository(h.db)
 	userID, err := userRepository.Create(user)
 	if err != nil {
-		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create user")
+		slog.Error("failed to create user", slog.String("error", err.Error()))
+		h.respondWithError(w, r, http.StatusInternalServerError, "Email already exists")
 		return
 	}
 
 	refreshToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.RefreshDuration, h.cfg.JWT.Key, "refresh")
 	if err != nil {
+		slog.Error("failed to create refresh token", slog.String("error", err.Error()))
 		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create refresh token")
 		return
 	}
 
 	accessToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.AcessDuration, h.cfg.JWT.Key, "access")
 	if err != nil {
+		slog.Error("failed to create access token", slog.String("error", err.Error()))
 		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create access token")
 		return
 	}

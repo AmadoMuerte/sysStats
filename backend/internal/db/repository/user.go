@@ -1,8 +1,12 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/AmadoMuerte/FlickSynergy/internal/db"
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/models"
+	"gorm.io/gorm"
 )
 
 type UserRepository interface {
@@ -29,7 +33,17 @@ func (r *UserRepositoryImpl) GetUserByID(id int) (*models.User, error) {
 }
 
 func (r *UserRepositoryImpl) Create(user *models.User) (uint, error) {
-	r.storage.DB.Create(user)
+	var existingUser models.User
+	if err := r.storage.DB.Where("email = ?", user.Email).First(&existingUser).Error; err == nil {
+		return 0, fmt.Errorf("user with email %s already exists", user.Email)
+	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, err
+	}
+
+	if err := r.storage.DB.Create(user).Error; err != nil {
+		return 0, err
+	}
+
 	return user.ID, nil
 }
 
