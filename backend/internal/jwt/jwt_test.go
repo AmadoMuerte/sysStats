@@ -38,14 +38,14 @@ func TestVerifyToken(t *testing.T) {
 		t.Fatalf("Expected no error, got %v", err)
 	}
 
-	_, err = VerifyToken(token, testKey)
+	_, err = VerifyToken(token, testKey, "access")
 	if err != nil {
 		t.Fatalf("Expected token to be valid, got %v", err)
 	}
 	t.Log("Token verified successfully")
 
 	invalidToken := token + "invalid"
-	_, err = VerifyToken(invalidToken, testKey)
+	_, err = VerifyToken(invalidToken, testKey, "access")
 	if err == nil {
 		t.Fatal("Expected an error for invalid token, got none")
 	}

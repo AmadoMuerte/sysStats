@@ -6,7 +6,8 @@ import (
 
 	"github.com/AmadoMuerte/FlickSynergy/internal/config"
 	"github.com/AmadoMuerte/FlickSynergy/internal/db"
-	"github.com/AmadoMuerte/FlickSynergy/internal/http-server/middlewares"
+	authhandler "github.com/AmadoMuerte/FlickSynergy/internal/http-server/handlers/auth"
+	_ "github.com/AmadoMuerte/FlickSynergy/internal/http-server/middlewares"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -53,7 +54,16 @@ func (s *Server) createRouter() http.Handler {
 	}))
 
 	router.Use(middleware.Logger)
-	_ = middlewares.AuthMiddleware{Cfg: s.cfg}
+	// mw := middlewares.AuthMiddleware{Cfg: s.cfg}
+
+	apiHandler := authhandler.New(s.cfg, s.db)
+
+	auth := chi.NewRouter()
+	auth.Post("/sign-in", apiHandler.SignIn)
+	auth.Post("/sign-up", apiHandler.SignUp)
+	auth.Post("/refresh", apiHandler.Refresh)
+
+	router.Mount("/api/login", auth)
 
 	return router
 }

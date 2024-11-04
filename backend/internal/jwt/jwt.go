@@ -8,7 +8,7 @@ import (
 )
 
 type UserInfo struct {
-	ID int
+	ID uint
 }
 
 func GenerateToken(user *UserInfo, duration time.Duration, key string, tokenType string) (string, error) {
@@ -28,7 +28,7 @@ func GenerateToken(user *UserInfo, duration time.Duration, key string, tokenType
 	return tokenString, nil
 }
 
-func VerifyToken(tokenString string, key string) (*jwt.Token, error) {
+func VerifyToken(tokenString string, key string, tokenType string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
@@ -39,6 +39,10 @@ func VerifyToken(tokenString string, key string) (*jwt.Token, error) {
 
 	if !token.Valid {
 		return nil, fmt.Errorf("invalid token")
+	}
+
+	if tokenType != token.Claims.(jwt.MapClaims)["typ"] {
+		return nil, fmt.Errorf("invalid token type")
 	}
 
 	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -61,7 +65,7 @@ func ExtractUserInfo(tokenString string, secretKey []byte) (*UserInfo, error) {
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		id := int(claims["sub"].(float64))
+		id := uint(claims["sub"].(float64))
 		return &UserInfo{
 			ID: id,
 		}, nil

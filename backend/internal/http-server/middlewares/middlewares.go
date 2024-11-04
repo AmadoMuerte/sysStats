@@ -35,7 +35,7 @@ func (m *AuthMiddleware) New(next http.Handler) http.Handler {
 
 		token := tokenParts[1]
 
-		_, err := jwt.VerifyToken(token, m.Cfg.JWT.Key)
+		_, err := jwt.VerifyToken(token, m.Cfg.JWT.Key, "access")
 		if err != nil {
 			respondWithError(w, r, http.StatusUnauthorized, "token not valid")
 			return
