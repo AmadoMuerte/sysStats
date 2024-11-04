@@ -18,13 +18,21 @@ type db struct {
 }
 
 type jwt struct {
-	Key            string        `required:"true" envconfig:"JWT_KEY"`
-	ExpirationTime time.Duration `required:"true" envconfig:"JWT_EXPIRATION_TIME"`
+	Key             string        `required:"true" envconfig:"JWT_KEY"`
+	AcessDuration   time.Duration `required:"true" envconfig:"JWT_ACCESS_DURATION"`
+	RefreshDuration time.Duration `required:"true" envconfig:"JWT_REFRESH_DURATION"`
+}
+
+type AppConfig struct {
+	Mode    string `envconfig:"RUN_MODE" default:"dev"`
+	Address string `envconfig:"APP_ADDRESS" default:"localhost"`
+	Port    string `envconfig:"APP_PORT" default:"8080"`
 }
 
 type Config struct {
 	DB  db
 	JWT jwt
+	App AppConfig
 }
 
 var getWd = os.Getwd
