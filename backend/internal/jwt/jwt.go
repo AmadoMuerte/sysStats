@@ -15,7 +15,7 @@ func GenerateToken(user *UserInfo, duration time.Duration, key string, tokenType
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID,
 		"iss": "FlickSynergy",
-		"exp": duration,
+		"exp": time.Now().Add(duration).Unix(),
 		"iat": time.Now().Unix(),
 		"typ": tokenType,
 	})
@@ -41,5 +41,31 @@ func VerifyToken(tokenString string, key string) (*jwt.Token, error) {
 		return nil, fmt.Errorf("invalid token")
 	}
 
+	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+	}
+
 	return token, nil
+}
+
+func ExtractUserInfo(tokenString string, secretKey []byte) (*UserInfo, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return secretKey, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		id := int(claims["sub"].(float64))
+		return &UserInfo{
+			ID: id,
+		}, nil
+	}
+
+	return nil, fmt.Errorf("invalid token")
 }
