@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -16,8 +17,14 @@ type db struct {
 	Port string `required:"true" envconfig:"DB_PORT"`
 }
 
+type jwt struct {
+	Key            string        `required:"true" envconfig:"JWT_KEY"`
+	ExpirationTime time.Duration `required:"true" envconfig:"JWT_EXPIRATION_TIME"`
+}
+
 type Config struct {
-	DB db
+	DB  db
+	JWT jwt
 }
 
 var getWd = os.Getwd
