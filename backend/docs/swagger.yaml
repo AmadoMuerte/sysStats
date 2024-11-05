@@ -1,0 +1,68 @@
+basePath: /api/v1
+definitions:
+  github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse:
+    description: This structure is used to send error information in JSON format.
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  internal_http-server_handlers_auth.refreshResponse:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  internal_lib_response.errorResponse:
+    description: This structure is used to send error information in JSON format.
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+info:
+  contact:
+    name: GitHub
+    url: https://github.com/AmadoMuerte
+  description: API для FlickSynergy, платформы для сбора предпочтений пользователей
+    при выборе фильма для совместного просмотра.
+  title: FlickSynergy API
+  version: "1.0"
+paths:
+  /login/refresh:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows users to refresh their access token using
+        a valid refresh token.
+      parameters:
+      - description: Bearer {refresh_token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_http-server_handlers_auth.refreshResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+      summary: Refresh Access Token
+      tags:
+      - Authentication
+schemes:
+- http
+- https
+swagger: "2.0"

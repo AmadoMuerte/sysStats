@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	_ "github.com/AmadoMuerte/FlickSynergy/docs"
 	"github.com/AmadoMuerte/FlickSynergy/internal/config"
 	"github.com/AmadoMuerte/FlickSynergy/internal/db"
 	authhandler "github.com/AmadoMuerte/FlickSynergy/internal/http-server/handlers/auth"
@@ -11,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
 type Server struct {
@@ -45,7 +47,7 @@ func (s *Server) createRouter() http.Handler {
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"}, // Разрешаем запросы с любых источников, убрать после релиза
+		AllowedOrigins:   []string{"http://*", "https://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Token"},
 		ExposedHeaders:   []string{"Link"},
@@ -63,7 +65,20 @@ func (s *Server) createRouter() http.Handler {
 	auth.Post("/sign-up", apiHandler.SignUp)
 	auth.Post("/refresh", apiHandler.Refresh)
 
-	router.Mount("/api/login", auth)
+	devMode(s.cfg.App.Mode, s.cfg.App.Address, s.cfg.App.Port, router)
+	router.Mount("/api/v1/login", auth)
 
 	return router
+}
+
+func devMode(mode string, addr string, port string, r *chi.Mux) {
+	if mode == "dev" {
+		r.Get("/swagger/*", httpSwagger.Handler(
+			httpSwagger.URL("http://"+addr+":"+port+"/swagger/doc.json"),
+			httpSwagger.UIConfig(map[string]string{
+				"layout": `"BaseLayout"`, //
+			}),
+		))
+		slog.Info("swagger started", slog.String("address", "http://"+addr+":"+port+"/swagger/"))
+	}
 }

@@ -9,6 +9,19 @@ import (
 	"github.com/go-chi/render"
 )
 
+// @Summary Refresh Access Token
+// @Description This endpoint allows users to refresh their access token using a valid refresh token.
+//
+//	The client must provide the refresh token in the Authorization header as a Bearer token.
+//
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {refresh_token}"
+// @Success 200 {object} refreshResponse
+// @Failure 401 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Router /login/refresh [post]
 func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" {
@@ -48,11 +61,13 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.JSON(w, r, struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-	}{
+	render.JSON(w, r, refreshResponse{
 		AccessToken:  newAccessToken,
 		RefreshToken: newRefreshToken,
 	})
+}
+
+type refreshResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
