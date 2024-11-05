@@ -18,3 +18,8 @@ func RespondWithError(w http.ResponseWriter, r *http.Request, status int, messag
 		Message: message,
 	})
 }
+
+func RespondWithJSON(w http.ResponseWriter, r *http.Request, status int, v interface{}) {
+	w.WriteHeader(status)
+	render.JSON(w, r, v)
+}

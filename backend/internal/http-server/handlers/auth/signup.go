@@ -7,7 +7,6 @@ import (
 
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/models"
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/repository"
-	"github.com/AmadoMuerte/FlickSynergy/internal/jwt"
 	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
 	"github.com/AmadoMuerte/FlickSynergy/internal/lib/validator"
 	"github.com/go-chi/render"
@@ -45,37 +44,19 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	user.Password = string(hashedPassword)
 
 	userRepository := repository.NewUserRepository(h.db)
-	userID, err := userRepository.Create(user)
+	_, err = userRepository.Create(user)
 	if err != nil {
 		slog.Error("failed to create user", slog.String("error", err.Error()))
 		response.RespondWithError(w, r, http.StatusInternalServerError, "Email already exists")
 		return
 	}
 
-	refreshToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.RefreshDuration, h.cfg.JWT.Key, "refresh")
-	if err != nil {
-		slog.Error("failed to create refresh token", slog.String("error", err.Error()))
-		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to create refresh token")
-		return
-	}
-
-	accessToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.AcessDuration, h.cfg.JWT.Key, "access")
-	if err != nil {
-		slog.Error("failed to create access token", slog.String("error", err.Error()))
-		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to create access token")
-		return
-	}
-
 	w.WriteHeader(http.StatusCreated)
 	render.JSON(w, r, struct {
-		Status       int    `json:"status"`
-		Message      string `json:"message"`
-		RefreshToken string `json:"refresh_token"`
-		AccessToken  string `json:"access_token"`
+		Status  int    `json:"status"`
+		Message string `json:"message"`
 	}{
-		Status:       http.StatusCreated,
-		Message:      "user created",
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
+		Status:  http.StatusCreated,
+		Message: "user created, please login",
 	})
 }
