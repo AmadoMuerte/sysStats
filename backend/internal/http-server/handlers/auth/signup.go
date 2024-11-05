@@ -7,8 +7,9 @@ import (
 
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/models"
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/repository"
-	"github.com/AmadoMuerte/FlickSynergy/internal/http-server/handlers"
 	"github.com/AmadoMuerte/FlickSynergy/internal/jwt"
+	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
+	"github.com/AmadoMuerte/FlickSynergy/internal/lib/validator"
 	"github.com/go-chi/render"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,19 +18,19 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	var req Credentials
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		slog.Error("failed to decode data", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusBadRequest, "failed to decode data")
+		response.RespondWithError(w, r, http.StatusBadRequest, "invalid data")
 		return
 	}
 
-	if !validateEmail(req.Email) {
+	if !validator.ValidateEmail(req.Email) {
 		slog.Error("invalid email", slog.String("error", "invalid email"))
-		h.respondWithError(w, r, http.StatusBadRequest, "invalid email")
+		response.RespondWithError(w, r, http.StatusBadRequest, "invalid email")
 		return
 	}
 
-	if err := validatePassword(req.Password); err != nil {
+	if err := validator.ValidatePassword(req.Password); err != nil {
 		slog.Error("invalid password", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusBadRequest, "invalid password")
+		response.RespondWithError(w, r, http.StatusBadRequest, "invalid password")
 		return
 	}
 
@@ -38,7 +39,7 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		slog.Error("failed to hash password", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create user")
+		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to hash password")
 		return
 	}
 	user.Password = string(hashedPassword)
@@ -47,21 +48,21 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	userID, err := userRepository.Create(user)
 	if err != nil {
 		slog.Error("failed to create user", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusInternalServerError, "Email already exists")
+		response.RespondWithError(w, r, http.StatusInternalServerError, "Email already exists")
 		return
 	}
 
 	refreshToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.RefreshDuration, h.cfg.JWT.Key, "refresh")
 	if err != nil {
 		slog.Error("failed to create refresh token", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create refresh token")
+		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to create refresh token")
 		return
 	}
 
 	accessToken, err := jwt.GenerateToken(&jwt.UserInfo{ID: userID}, h.cfg.JWT.AcessDuration, h.cfg.JWT.Key, "access")
 	if err != nil {
 		slog.Error("failed to create access token", slog.String("error", err.Error()))
-		h.respondWithError(w, r, http.StatusInternalServerError, "failed to create access token")
+		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to create access token")
 		return
 	}
 
@@ -76,13 +77,5 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 		Message:      "user created",
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
-	})
-}
-
-func (h *AuthHandler) respondWithError(w http.ResponseWriter, r *http.Request, status int, message string) {
-	w.WriteHeader(status)
-	render.JSON(w, r, handlers.ErrorResponse{
-		Status:  status,
-		Message: message,
 	})
 }
