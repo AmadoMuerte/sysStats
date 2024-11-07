@@ -9,10 +9,23 @@ import (
 	"github.com/AmadoMuerte/FlickSynergy/internal/db/repository"
 	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
 	"github.com/AmadoMuerte/FlickSynergy/internal/lib/validator"
-	"github.com/go-chi/render"
 	"golang.org/x/crypto/bcrypt"
 )
 
+type singUpResponse struct {
+	Message string `json:"message"`
+}
+
+// @Summary Sign Up
+// @Description This endpoint allows user to sign up using their email and passwd.
+// @Tags Authentication
+// @Accept json
+// @Produce json
+// @Param credentials body Credentials true "Credentials for signing up"
+// @Success 201 {object} singUpResponse
+// @Failure 400 {object} response.errorResponse
+// @Failure 500 {object} response.errorResponse
+// @Router /login/sign-up [post]
 func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	var req Credentials
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -38,7 +51,7 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		slog.Error("failed to hash password", slog.String("error", err.Error()))
-		response.RespondWithError(w, r, http.StatusInternalServerError, "failed to hash password")
+		response.RespondWithError(w, r, http.StatusInternalServerError, "Internal server error")
 		return
 	}
 	user.Password = string(hashedPassword)
@@ -52,11 +65,7 @@ func (h *AuthHandler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	render.JSON(w, r, struct {
-		Status  int    `json:"status"`
-		Message string `json:"message"`
-	}{
-		Status:  http.StatusCreated,
-		Message: "user created, please login",
+	response.RespondWithJSON(w, r, http.StatusCreated, &singUpResponse{
+		Message: "User created successfully",
 	})
 }

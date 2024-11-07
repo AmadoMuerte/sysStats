@@ -12,6 +12,11 @@ type Credentials struct {
 	Password string `json:"password"`
 }
 
+type tokenResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
 type AuthHandler struct {
 	cfg *config.Config
 	db  *db.Storage

@@ -10,7 +10,7 @@ import (
 
 // @title FlickSynergy API
 // @version 1.0
-// @description API для FlickSynergy, платформы для сбора предпочтений пользователей при выборе фильма для совместного просмотра.
+// @description API для FlickSynergy, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.
 // @contact.name GitHub
 // @contact.url https://github.com/AmadoMuerte
 // @basePath /api/v1

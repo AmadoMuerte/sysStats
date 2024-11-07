@@ -5,7 +5,7 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "API для FlickSynergy, платформы для сбора предпочтений пользователей при выборе фильма для совместного просмотра.",
+        "description": "API для FlickSynergy, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.",
         "title": "FlickSynergy API",
         "contact": {
             "name": "GitHub",
@@ -27,7 +27,7 @@
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Refresh Access Token",
+                "summary": "Refresh Access token",
                 "parameters": [
                     {
                         "type": "string",
@@ -41,7 +41,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_http-server_handlers_auth.refreshResponse"
+                            "$ref": "#/definitions/backend_internal_http-server_handlers_auth.tokenResponse"
                         }
                     },
                     "401": {
@@ -58,10 +58,132 @@
                     }
                 }
             }
+        },
+        "/login/sign-in": {
+            "post": {
+                "description": "This endpoint allows user to sign in using their email and passwd.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign In",
+                "parameters": [
+                    {
+                        "description": "Credentials for signing in",
+                        "name": "credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/backend_internal_http-server_handlers_auth.Credentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/backend_internal_http-server_handlers_auth.tokenResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/sign-up": {
+            "post": {
+                "description": "This endpoint allows user to sign up using their email and passwd.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign Up",
+                "parameters": [
+                    {
+                        "description": "Credentials for signing up",
+                        "name": "credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/backend_internal_http-server_handlers_auth.Credentials"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/backend_internal_http-server_handlers_auth.singUpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse": {
+        "backend_internal_http-server_handlers_auth.Credentials": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "backend_internal_http-server_handlers_auth.singUpResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "backend_internal_http-server_handlers_auth.tokenResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "backend_internal_lib_response.errorResponse": {
             "description": "This structure is used to send error information in JSON format.",
             "type": "object",
             "properties": {
@@ -73,18 +195,7 @@
                 }
             }
         },
-        "internal_http-server_handlers_auth.refreshResponse": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                },
-                "refresh_token": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_lib_response.errorResponse": {
+        "github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse": {
             "description": "This structure is used to send error information in JSON format.",
             "type": "object",
             "properties": {
