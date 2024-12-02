@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/config"
-	"github.com/AmadoMuerte/FlickSynergy/internal/db/models"
+	"github.com/AmadoMuerte/sysStats/internal/config"
+	"github.com/AmadoMuerte/sysStatsernal/db/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
