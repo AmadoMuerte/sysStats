@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/AmadoMuerte/sysStats/internal/config"
-	"github.com/AmadoMuerte/sysStatsernal/db/models"
+	"github.com/AmadoMuerte/sysStats/internal/db/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -38,7 +38,6 @@ func autoMigrateModels(db *gorm.DB) {
 		&models.User{},
 	)
 
-	// Выполнение миграции
 	if err := db.AutoMigrate(modelsSlice...); err != nil {
 		log.Fatalf("Ошибка миграции: %v", err)
 	}

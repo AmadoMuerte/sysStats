@@ -8,9 +8,9 @@ import (
 	"github.com/AmadoMuerte/sysStats/internal/config"
 	"github.com/AmadoMuerte/sysStats/internal/db"
 	authhandler "github.com/AmadoMuerte/sysStats/internal/http-server/handlers/auth"
+	monitoringhandler "github.com/AmadoMuerte/sysStats/internal/http-server/handlers/monitoring"
 	_ "github.com/AmadoMuerte/sysStats/internal/http-server/middlewares"
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
@@ -55,18 +55,24 @@ func (s *Server) createRouter() http.Handler {
 		MaxAge:           300,
 	}))
 
-	router.Use(middleware.Logger)
-	// mw := middlewares.AuthMiddleware{Cfg: s.cfg}
-
 	apiHandler := authhandler.New(s.cfg, s.db)
-
 	auth := chi.NewRouter()
 	auth.Post("/sign-in", apiHandler.SignIn)
-	auth.Post("/sign-up", apiHandler.SignUp)
+	// auth.Post("/sign-up", apiHandler.SignUp)
 	auth.Post("/refresh", apiHandler.Refresh)
+
+	monitoring := chi.NewRouter()
+	// mw := middlewares.AuthMiddleware{Cfg: s.cfg}
+	// monitoring.Use(mw.New)
+	monitoringhandler := monitoringhandler.New(s.cfg, s.db)
+
+	monitoring.Get("/mem", monitoringhandler.GetMem)
+	monitoring.Get("/cpu", monitoringhandler.GetCPU)
+	monitoring.Get("/disk", monitoringhandler.GetDisk)
 
 	devMode(s.cfg.App.Mode, s.cfg.App.Address, s.cfg.App.Port, router)
 	router.Mount("/api/v1/login", auth)
+	router.Mount("/api/v1/monitoring", monitoring)
 
 	return router
 }

@@ -50,13 +50,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -96,13 +96,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -142,13 +142,13 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -198,7 +198,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse": {
+        "github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse": {
             "description": "This structure is used to send error information in JSON format.",
             "type": "object",
             "properties": {
@@ -220,7 +220,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api/v1",
 	Schemes:          []string{"http", "https"},
 	Title:            "sysStats API",
-	Description:      "API для sysStats, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.",
+	Description:      "API для sysStats",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

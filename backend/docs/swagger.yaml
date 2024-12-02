@@ -39,8 +39,7 @@ info:
   contact:
     name: GitHub
     url: https://github.com/AmadoMuerte
-  description: API для sysStats, платформа для сбора предпочтений пользователей
-    при выборе фильма для совместного просмотра.
+  description: API для sysStats
   title: sysStats API
   version: "1.0"
 paths:

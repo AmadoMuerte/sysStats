@@ -10,7 +10,7 @@ import (
 
 // @title sysStats API
 // @version 1.0
-// @description API для sysStats, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.
+// @description API для sysStats
 // @contact.name GitHub
 // @contact.url https://github.com/AmadoMuerte
 // @basePath /api/v1
@@ -23,7 +23,6 @@ func main() {
 
 	storage := db.New(cfg)
 	fmt.Print("Connected to DB\n")
-
 	server := server.New(cfg, storage)
 	server.Start()
 }
