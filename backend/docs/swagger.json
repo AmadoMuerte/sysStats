@@ -5,8 +5,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "API для FlickSynergy, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.",
-        "title": "FlickSynergy API",
+        "description": "API для sysStats, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.",
+        "title": "sysStats API",
         "contact": {
             "name": "GitHub",
             "url": "https://github.com/AmadoMuerte"
@@ -47,13 +47,13 @@
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -93,13 +93,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -139,13 +139,13 @@
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse"
+                            "$ref": "#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse"
                         }
                     }
                 }
@@ -195,7 +195,7 @@
                 }
             }
         },
-        "github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse": {
+        "github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse": {
             "description": "This structure is used to send error information in JSON format.",
             "type": "object",
             "properties": {

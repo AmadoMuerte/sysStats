@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/db"
-	"github.com/AmadoMuerte/FlickSynergy/internal/db/models"
+	"github.com/AmadoMuerte/sysStats/internal/db"
+	"github.com/AmadoMuerte/sysStats/internal/db/models"
 	"gorm.io/gorm"
 )
 

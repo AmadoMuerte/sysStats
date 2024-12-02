@@ -3,14 +3,14 @@ package main
 import (
 	"fmt"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/config"
-	"github.com/AmadoMuerte/FlickSynergy/internal/db"
-	"github.com/AmadoMuerte/FlickSynergy/internal/http-server/server"
+	"github.com/AmadoMuerte/sysStats/internal/config"
+	"github.com/AmadoMuerte/sysStats/internal/db"
+	"github.com/AmadoMuerte/sysStats/internal/http-server/server"
 )
 
-// @title FlickSynergy API
+// @title sysStats API
 // @version 1.0
-// @description API для FlickSynergy, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.
+// @description API для sysStats, платформа для сбора предпочтений пользователей при выборе фильма для совместного просмотра.
 // @contact.name GitHub
 // @contact.url https://github.com/AmadoMuerte
 // @basePath /api/v1

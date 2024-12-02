@@ -3,8 +3,8 @@ package authhandler
 import (
 	"net/http"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/config"
-	"github.com/AmadoMuerte/FlickSynergy/internal/db"
+	"github.com/AmadoMuerte/sysStats/internal/config"
+	"github.com/AmadoMuerte/sysStats/internal/db"
 )
 
 type Credentials struct {

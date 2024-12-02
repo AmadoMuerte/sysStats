@@ -5,10 +5,10 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/db/repository"
-	"github.com/AmadoMuerte/FlickSynergy/internal/jwt"
-	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
-	"github.com/AmadoMuerte/FlickSynergy/internal/lib/validator"
+	"github.com/AmadoMuerte/sysStats/internal/db/repository"
+	"github.com/AmadoMuerte/sysStats/internal/jwt"
+	"github.com/AmadoMuerte/sysStats/internal/lib/response"
+	"github.com/AmadoMuerte/sysStats/internal/lib/validator"
 	"golang.org/x/crypto/bcrypt"
 )
 

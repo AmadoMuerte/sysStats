@@ -27,7 +27,7 @@ definitions:
       status:
         type: integer
     type: object
-  github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse:
+  github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse:
     description: This structure is used to send error information in JSON format.
     properties:
       message:
@@ -39,9 +39,9 @@ info:
   contact:
     name: GitHub
     url: https://github.com/AmadoMuerte
-  description: API для FlickSynergy, платформа для сбора предпочтений пользователей
+  description: API для sysStats, платформа для сбора предпочтений пользователей
     при выборе фильма для совместного просмотра.
-  title: FlickSynergy API
+  title: sysStats API
   version: "1.0"
 paths:
   /login/refresh:
@@ -66,11 +66,11 @@ paths:
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
       summary: Refresh Access token
       tags:
       - Authentication
@@ -96,11 +96,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
       summary: Sign In
       tags:
       - Authentication
@@ -126,11 +126,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_AmadoMuerte_FlickSynergy_internal_lib_response.errorResponse'
+            $ref: '#/definitions/github_com_AmadoMuerte_sysStats_internal_lib_response.errorResponse'
       summary: Sign Up
       tags:
       - Authentication

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/jwt"
-	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
+	"github.com/AmadoMuerte/sysStats/internal/jwt"
+	"github.com/AmadoMuerte/sysStats/internal/lib/response"
 	"github.com/go-chi/render"
 )
 

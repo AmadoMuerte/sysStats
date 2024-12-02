@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/AmadoMuerte/FlickSynergy/internal/config"
-	"github.com/AmadoMuerte/FlickSynergy/internal/jwt"
-	"github.com/AmadoMuerte/FlickSynergy/internal/lib/response"
+	"github.com/AmadoMuerte/sysStats/internal/config"
+	"github.com/AmadoMuerte/sysStats/internal/jwt"
+	"github.com/AmadoMuerte/sysStats/internal/lib/response"
 )
 
 type AuthMiddleware struct {

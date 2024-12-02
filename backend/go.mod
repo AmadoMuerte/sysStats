@@ -1,4 +1,4 @@
-module github.com/AmadoMuerte/FlickSynergy
+module github.com/AmadoMuerte/sysStats
 
 go 1.23.2
 
