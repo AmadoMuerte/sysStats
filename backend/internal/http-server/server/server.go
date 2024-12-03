@@ -9,6 +9,8 @@ import (
 	"github.com/AmadoMuerte/sysStats/internal/db"
 	authhandler "github.com/AmadoMuerte/sysStats/internal/http-server/handlers/auth"
 	monitoringhandler "github.com/AmadoMuerte/sysStats/internal/http-server/handlers/monitoring"
+	websockethandler "github.com/AmadoMuerte/sysStats/internal/http-server/handlers/websocket"
+	"github.com/AmadoMuerte/sysStats/internal/http-server/middlewares"
 	_ "github.com/AmadoMuerte/sysStats/internal/http-server/middlewares"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
@@ -47,32 +49,36 @@ func (s *Server) createRouter() http.Handler {
 
 	router := chi.NewRouter()
 	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"http://*", "https://*"},
+		AllowedOrigins:   []string{"http://localhost:5173"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Token"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
+	mw := middlewares.AuthMiddleware{Cfg: s.cfg}
 
 	apiHandler := authhandler.New(s.cfg, s.db)
 	auth := chi.NewRouter()
 	auth.Post("/sign-in", apiHandler.SignIn)
-	// auth.Post("/sign-up", apiHandler.SignUp)
 	auth.Post("/refresh", apiHandler.Refresh)
 
 	monitoring := chi.NewRouter()
-	// mw := middlewares.AuthMiddleware{Cfg: s.cfg}
-	// monitoring.Use(mw.New)
+	monitoring.Use(mw.New)
 	monitoringhandler := monitoringhandler.New(s.cfg, s.db)
-
 	monitoring.Get("/mem", monitoringhandler.GetMem)
 	monitoring.Get("/cpu", monitoringhandler.GetCPU)
 	monitoring.Get("/disk", monitoringhandler.GetDisk)
 
+	websocketHandler := websockethandler.New()
+	websocketRouter := chi.NewRouter()
+	// websocketRouter.Use(mw.New)
+	websocketRouter.Handle("/metrics", http.HandlerFunc(websocketHandler.HandleConnection))
+
 	devMode(s.cfg.App.Mode, s.cfg.App.Address, s.cfg.App.Port, router)
 	router.Mount("/api/v1/login", auth)
 	router.Mount("/api/v1/monitoring", monitoring)
+	router.Mount("/api/v1/websocket", websocketRouter)
 
 	return router
 }
@@ -82,7 +88,7 @@ func devMode(mode string, addr string, port string, r *chi.Mux) {
 		r.Get("/swagger/*", httpSwagger.Handler(
 			httpSwagger.URL("http://"+addr+":"+port+"/swagger/doc.json"),
 			httpSwagger.UIConfig(map[string]string{
-				"layout": `"BaseLayout"`, //
+				"layout": `"BaseLayout"`,
 			}),
 		))
 		slog.Info("swagger started", slog.String("address", "http://"+addr+":"+port+"/swagger/"))
