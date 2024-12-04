@@ -1,35 +1,35 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+:root {
+    --color-primary: #D9534F;        
+    --color-primary-focus: #F0AD4E;  
+    /* --color-primary-negative:  #D9534F; */
+    
+    --grey-4: #1A1A1D;              
+    --grey-3: #2D2D2D;              
+    --grey-2: #3C4043;              
+    --grey-1: #B0B3B8;              
+    --grey-0: #E6E9ED;              
+    --white: #FFFFFF;               
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body {
+    background-color: var(--grey-4);
+    color: var(--white);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+a {
+    text-decoration: none;
+    color: inherit;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.container {
+    max-width: 1440px;
+    padding: 0 12px;
+    margin: 0 auto;
 }
