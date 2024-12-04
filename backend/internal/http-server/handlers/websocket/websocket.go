@@ -30,6 +30,7 @@ type Metrics struct {
 	Mem  *mem.VirtualMemoryStat `json:"mem"`
 	Disk *disk.UsageStat        `json:"disk"`
 	Cpu  []cpu.InfoStat         `json:"cpu"`
+	Time int64                  `json:"time"`
 }
 
 func getSystemMetrics() (Metrics, error) {
@@ -49,7 +50,7 @@ func getSystemMetrics() (Metrics, error) {
 		return Metrics{}, err
 	}
 
-	return Metrics{v, d, c}, err
+	return Metrics{v, d, c, time.Now().Unix()}, err
 }
 
 func (h *WebSocketHandler) HandleConnection(w http.ResponseWriter, r *http.Request) {
@@ -74,6 +75,6 @@ func (h *WebSocketHandler) HandleConnection(w http.ResponseWriter, r *http.Reque
 			slog.Error("failed to write JSON", slog.String("error", err.Error()))
 			break
 		}
-		time.Sleep(1 * time.Second)
+		time.Sleep(4 * time.Second)
 	}
 }

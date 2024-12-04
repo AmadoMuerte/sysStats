@@ -4,6 +4,7 @@ import 'primeicons/primeicons.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import {createWebHistory, createRouter} from 'vue-router'
+import VueApexCharts from "vue3-apexcharts";
 
 import HomeView from './views/HomeView.vue'
 import Monitoring from './views/Monitoring.vue'
@@ -20,5 +21,7 @@ const router = createRouter({
     routes
 })
 
-
-createApp(App).use(router).mount('#app')
+const app = createApp(App)
+app.use(router)
+app.use(VueApexCharts)
+app.mount('#app')
