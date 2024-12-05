@@ -7,12 +7,17 @@ type DataPoint = {
     time: number;
     total: number;
     used: number;
+    cpuPercent: number;
+    net: {
+        gbReceived: number;
+        gbSent: number;
+    };
 };
 
 const chartData = ref<DataPoint[]>([]);
 
 
-function bytesToGigabytes(bytes) {
+function bytesToGigabytes(bytes: number) {
     return Number((bytes / (1024 ** 3)).toFixed(3));
 }
 
@@ -21,12 +26,22 @@ const { status, data, send, close } = useWebSocket('ws://localhost:8080/api/v1/w
     onMessage: (message) => {
         // Парсим данные из сообщения
         const parsedData = JSON.parse(data.value);
+        const net = {
+            gbReceived: bytesToGigabytes(parsedData.net[0].bytesRecv),
+            gbSent: bytesToGigabytes(parsedData.net[0].bytesSent)            
+        }
+
         const dataPoint: DataPoint = {
             time: parsedData.time,
             total: bytesToGigabytes(parsedData.mem.total),
-            used: bytesToGigabytes(parsedData.mem.used),
+            used: bytesToGigabytes(parsedData.mem),
+            cpuPercent: parsedData.cpu[0],
+            net: net
         };
 
+        if (chartData.value.length == 150) {
+            chartData.value = chartData.value.slice(10);
+        }
         chartData.value = [...chartData.value, dataPoint];
     }
 });

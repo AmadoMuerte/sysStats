@@ -1,8 +1,6 @@
 <script setup lang="ts">
 
-// @ts-ignore
-import Footer from './components/Footer.vue';
-import { RouterLink, RouterView } from 'vue-router';
+import {RouterView } from 'vue-router';
 import Navigation from './components/navigation/Navigation.vue';
 
 </script>
