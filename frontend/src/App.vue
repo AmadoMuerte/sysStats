@@ -2,18 +2,27 @@
 
 import {RouterView } from 'vue-router';
 import Navigation from './components/navigation/Navigation.vue';
+import { ref } from 'vue';
+import Login from './views/Login.vue';
+
+const auth = ref(false);
+
+const switchAuth = () => {
+  auth.value = !auth.value
+}
 
 </script>
 
 
 <template>
   <div class="app">
-    <div class="wrapper">
+    <div v-if="auth" class="wrapper">
       <Navigation />
       <main class="main">
         <RouterView />
       </main>
     </div>
+    <Login v-else :switchAuth="switchAuth"/>
   </div>
 </template>
 

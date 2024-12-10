@@ -1,30 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useWebSocket } from '@vueuse/core';
-import LineChart from '@/components/LineChart.vue';
+import Charts from '@/components/Charts.vue';
+import type { DataPoint } from "@/types";
 
-type DataPoint = {
-    time: number;
-    total: number;
-    used: number;
-    cpuPercent: number;
-    net: {
-        gbReceived: number;
-        gbSent: number;
-    };
-};
 
 const chartData = ref<DataPoint[]>([]);
-
 
 function bytesToGigabytes(bytes: number) {
     return Number((bytes / (1024 ** 3)).toFixed(3));
 }
 
-// Устанавливаем WebSocket соединение
-const { status, data, send, close } = useWebSocket('ws://localhost:8080/api/v1/websocket/metrics', {
-    onMessage: (message) => {
-        // Парсим данные из сообщения
+
+const { status, data, send, close } = useWebSocket("ws://localhost:8080/api/v1/websocket/metrics", {
+    onMessage: () => {
         const parsedData = JSON.parse(data.value);
         const net = {
             gbReceived: bytesToGigabytes(parsedData.net[0].bytesRecv),
@@ -50,7 +39,7 @@ const { status, data, send, close } = useWebSocket('ws://localhost:8080/api/v1/w
 
 <template>
     <h2>Monitoring</h2>
-    <LineChart :initial-data="chartData" />
+    <Charts :initial-data="chartData" />
 </template>
 
 <style>

@@ -16,10 +16,12 @@
     "@canvasjs/vue-charts": "^1.0.4",
     "@vueuse/core": "^12.0.0",
     "apexcharts": "^4.1.0",
+    "axios": "^1.7.9",
     "primeicons": "^7.0.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
-    "vue3-apexcharts": "^1.8.0"
+    "vue3-apexcharts": "^1.8.0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",

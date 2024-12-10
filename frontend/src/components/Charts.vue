@@ -1,18 +1,7 @@
 <script setup lang="ts">
+import type { DataPoint } from '@/types';
 import { ref, reactive, watch, defineProps } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
-
-type DataPoint = {
-    time: number;
-    total: number;
-    used: number;
-    cpuPercent: number;
-    net: {
-        gbReceived: number;
-        gbSent: number;
-    };
-};
-
 
 const props = defineProps({
     initialData: {

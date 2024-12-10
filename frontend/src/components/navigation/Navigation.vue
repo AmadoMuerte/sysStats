@@ -14,11 +14,6 @@ const nav = [
         icon: "pi pi-chart-line",
         link: "/monitoring"
     },
-    {
-        name: "Auth",
-        icon: "pi pi-user",
-        link: "/auth"
-    }
 ];
 </script>
 

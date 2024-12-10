@@ -8,11 +8,11 @@ import VueApexCharts from "vue3-apexcharts";
 
 import HomeView from './views/HomeView.vue'
 import Monitoring from './views/Monitoring.vue'
-import Auth from './views/Auth.vue'
+import Login from './views/Login.vue'
 
 const routes = [
     { path: '/', component: HomeView },
-    { path: '/auth', component: Auth },
+    { path: '/login', component: Login },
     { path: '/monitoring', component: Monitoring },
 ]
 
